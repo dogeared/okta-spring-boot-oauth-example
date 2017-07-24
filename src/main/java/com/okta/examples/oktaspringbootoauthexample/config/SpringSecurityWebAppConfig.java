@@ -1,14 +1,21 @@
 package com.okta.examples.oktaspringbootoauthexample.config;
 
 
+import com.okta.examples.oktaspringbootoauthexample.jwt.JWTFilter;
+import com.okta.examples.oktaspringbootoauthexample.jwt.TokenProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
 @EnableOAuth2Sso
 public class SpringSecurityWebAppConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    TokenProvider tokenProvider;
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -17,6 +24,8 @@ public class SpringSecurityWebAppConfig extends WebSecurityConfigurerAdapter {
             .antMatcher("/**")
             .authorizeRequests()
             .antMatchers("/").permitAll()
-            .anyRequest().authenticated();
+            .anyRequest().authenticated()
+            .and()
+            .addFilterBefore(new JWTFilter(tokenProvider), BasicAuthenticationFilter.class);
     }
 }
