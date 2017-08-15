@@ -26,6 +26,8 @@ public class SpringSecurityWebAppConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/").permitAll()
             .anyRequest().authenticated()
             .and()
+            .logout().logoutSuccessUrl("/")
+            .and()
             .addFilterBefore(new JWTFilter(tokenProvider), BasicAuthenticationFilter.class);
     }
 }

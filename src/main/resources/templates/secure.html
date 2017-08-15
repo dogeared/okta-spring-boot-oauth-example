@@ -13,7 +13,10 @@
                 <div th:if="${user}">
                     <h1 th:inline="text">Hello [[${user.name}]]</h1>
                     <h3>This is a secure page!</h3>
-                    <a href="/" class="btn btn-primary">Go Home</a>
+                    <form method="POST" class="logout-complete" th:action="@{/logout}">
+                        <input type="button" class="btn btn-danger logout-kickoff" value="Logout"/>
+                        <a href="/" class="btn btn-primary">Go Home</a>
+                    </form>
                 </div>
                 <div th:unless="${user}">
                     <h1>SHOULDN'T BE HERE!</h1>
@@ -21,5 +24,25 @@
             </div>
         </div>
     </div>
+    <script th:inline="text">
+        $(document).ready(function () {
+            $('.logout-kickoff').click(function () {
+                $.ajax({
+                    url : '[[${oktaTenantUri}]]/api/v1/sessions/me',
+                    type: 'DELETE',
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function (data, textStatus, jqXHR) {
+                        console.log('success!');
+                        $('.logout-complete').submit();
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
