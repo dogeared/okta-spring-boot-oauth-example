@@ -12,11 +12,18 @@
 
                 <div th:if="${user}">
                     <h1 th:inline="text">Hello [[${user.name}]]</h1>
-                    <h3>This is a secure page!</h3>
+                    <h3 th:inline="text">This is the [[${#httpServletRequest.getRequestURI()}]] page!</h3>
                     <form method="POST" class="logout-complete" th:action="@{/logout}">
                         <input type="button" class="btn btn-danger logout-kickoff" value="Logout"/>
+                        <a href="/more-secure" class="btn btn-primary">Go to /more-secure</a>
                         <a href="/" class="btn btn-primary">Go Home</a>
                     </form>
+                    <div th:if="${authorities}">
+                        <h4>/more-secure requires membership in one of:</h4>
+                        <ul class="col-md-offset-3" th:each="authority : ${authorities}" style="text-align: left">
+                            <li th:text="${authority}"></li>
+                        </ul>
+                    </div>
                 </div>
                 <div th:unless="${user}">
                     <h1>SHOULDN'T BE HERE!</h1>

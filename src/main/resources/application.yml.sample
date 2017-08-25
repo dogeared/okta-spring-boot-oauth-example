@@ -18,3 +18,8 @@ security:
       userInfoUri: # userinfo_endpoint
       preferTokenInfo: false
       openIdConfigUri: # /.well-known/openid-configuration uri
+okta:
+  tenant:
+    uri: #https://your-tenant.oktapreview.com
+  moreSecure:
+    authorities: # comma separated list of groups that should have access to the /more-secure endpoint
